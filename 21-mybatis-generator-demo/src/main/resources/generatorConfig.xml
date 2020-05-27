@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="H2Tables" targetRuntime="MyBatis3"><!--运行时目标指向MyBatis3-->
+
+        <!--1.配置plugin-->
+        <plugin type="org.mybatis.generator.plugins.FluentBuilderMethodsPlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
+
+        <!--2.配置jdbc-->
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:mem:testdb"
+                        userId="sa"
+                        password="">
+        </jdbcConnection>
+
+        <!--3.配置生成model-->
+        <javaModelGenerator targetPackage="com.example.mybatisgeneratordemo.model"
+                            targetProject="./src/main/java"><!--配置生成路径-->
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--4.配置生成mapper-->
+        <sqlMapGenerator targetPackage="com.example.mybatisgeneratordemo.mapper"
+                         targetProject="./src/main/resources/mapper"><!--配置xml生成路径-->
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!--5.配置生成javaclient-->
+        <javaClientGenerator type="MIXEDMAPPER"
+                             targetPackage="com.example.mybatisgeneratordemo.mapper"
+                             targetProject="./src/main/java"><!--配置类生成路径-->
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!--6.配置生成table-->
+        <table tableName="t_coffee" domainObjectName="Coffee" >
+            <!--配置id字段自增键-->
+            <generatedKey column="id" sqlStatement="CALL IDENTITY()" identity="true" />
+            <!--配置price字段为Money类型，对应java类型BIGINT，并指定类型转换的typeHandler类-->
+            <columnOverride column="price" javaType="org.joda.money.Money" jdbcType="BIGINT"
+                            typeHandler="com.example.mybatisgeneratordemo.handler.MoneyTypeHandler"/>
+        </table>
+    </context>
+</generatorConfiguration>
