@@ -43,17 +43,15 @@ public class SimplereactordemoApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //创建1到6的序列
+        //创建1到6的序列,如果不指定任何线程信息，默认都在主线程main上执行
         Flux.range(1, 6)
                 //只请求了4个
                 //.publishOn(Schedulers.elastic())
 
-                //打印请求数 注意顺序造成的区别
-                .doOnRequest(n -> log.info("Request {} number", n))
-				//.publishOn(Schedulers.elastic())
+                .doOnRequest(n -> log.info("Request {} number", n))                     //打印请求数和订阅线程 注意顺序造成的区别
+				.publishOn(Schedulers.elastic())                                        //设置发布线程，消息发布设置在elastic线程池
 
-                //序列1到6请求完成后打印Publisher COMPLETE 1
-                .doOnComplete(() -> log.info("Publisher COMPLETE 1"))
+                .doOnComplete(() -> log.info("Publisher COMPLETE 1"))                   //序列1到6请求完成后打印Publisher COMPLETE 1
 
                 //map实现元素转换（映射）
                 .map(i -> {
@@ -62,7 +60,7 @@ public class SimplereactordemoApplication implements ApplicationRunner {
 					return i;
                 })
                 .doOnComplete(() -> log.info("Publisher COMPLETE 2"))
-				.subscribeOn(Schedulers.single())
+				.subscribeOn(Schedulers.single())                                       //设置订阅线程，单独的线程进行订阅
 
                 //抛出异常时，执行特定的lambda表达式
                 /*.onErrorResume(e -> {
@@ -73,12 +71,12 @@ public class SimplereactordemoApplication implements ApplicationRunner {
                 //当异常发生时，返回指定的默认值并终止后续操作
 				.onErrorReturn(-1)
 
-                //订阅
-                .subscribe(
-                        i -> log.info("Subscribe {}: {}", Thread.currentThread(), i),
-                        e -> log.error("error {}", e.toString()),                       //输出异常
-                        () -> log.info("Subscriber COMPLETE")
-						//s -> s.request(4)                                             //只取回4个请求,且Publisher COMPLETE不输出
+                //订阅(订阅发生之前什么都不会做)
+                .subscribe(  //传入consumer
+                        i -> log.info("Subscribe {}: {}", Thread.currentThread(), i),   //对元素进行消费
+                        e -> log.error("error {}", e.toString()),                       //对异常信息进行消费
+                        () -> log.info("Subscriber COMPLETE")                           //订阅结束后的处理
+						//s -> s.request(4)                                             //设置请求元素的个数，只取回4个请求,多余的未被发布出来 Publisher COMPLETE不输出
                 );
         Thread.sleep(2000);
     }
