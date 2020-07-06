@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 
 @SpringBootApplication
 @Slf4j
-public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration
+public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration //继承配置类AbstractR2dbcConfiguration
 		implements ApplicationRunner {
 	@Autowired
 	private DatabaseClient client;
@@ -35,6 +35,7 @@ public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration
 		SpringApplication.run(SimpleR2dbcDemoApplication.class, args);
 	}
 
+	//实现AbstractR2dbcConfiguration中的ConnectionFactory
 	@Bean
 	public ConnectionFactory connectionFactory() {
 		return new H2ConnectionFactory(
@@ -58,7 +59,7 @@ public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration
 	public void run(ApplicationArguments args) throws Exception {
 		CountDownLatch cdl = new CountDownLatch(2);
 
-		client.execute()
+		client.execute()                                            //execute操作
 				.sql("select * from t_coffee")                   //执行select语句
 				.as(Coffee.class)                                   //转换成Coffee对象
 				.fetch()                                            //获取结果集
@@ -67,7 +68,7 @@ public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration
 //				.subscribeOn(Schedulers.elastic())
 				.subscribe(c -> log.info("Fetch execute() {}", c)); //订阅：打印结果
 
-		client.select()                                                     //使用select查询
+		client.select()                                                     //select操作
 				.from("t_coffee")                                        //指定查询的表明
 				.orderBy(Sort.by(Sort.Direction.DESC, "id"))     //按照id降序排列
 				.page(PageRequest.of(0, 3))                      //分页：大小3，第0页
