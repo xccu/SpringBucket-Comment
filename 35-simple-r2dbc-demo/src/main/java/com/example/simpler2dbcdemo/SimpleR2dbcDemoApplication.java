@@ -20,6 +20,7 @@ import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.dialect.Dialect;
 import org.springframework.data.r2dbc.function.DatabaseClient;
 import org.springframework.data.r2dbc.function.convert.R2dbcCustomConversions;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
@@ -65,7 +66,7 @@ public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration //继
 				.fetch()                                            //获取结果集
 				.first()                                            //获取第一条
 				.doFinally(s -> cdl.countDown())
-//				.subscribeOn(Schedulers.elastic())
+				.subscribeOn(Schedulers.elastic())                  //指定在elastic线程
 				.subscribe(c -> log.info("Fetch execute() {}", c)); //订阅：打印结果
 
 		client.select()                                                     //select操作
@@ -76,7 +77,7 @@ public class SimpleR2dbcDemoApplication extends AbstractR2dbcConfiguration //继
 				.fetch()                                                    //获取结果集
 				.all()                                                      //获取全部
 				.doFinally(s -> cdl.countDown())                            //结束后执行countDown
-//				.subscribeOn(Schedulers.elastic())
+				//.subscribeOn(Schedulers.elastic())                          //指定在elastic线程
 				.subscribe(c -> log.info("Fetch select() {}", c));          //订阅：打印结果
 
 		log.info("After Starting.");
