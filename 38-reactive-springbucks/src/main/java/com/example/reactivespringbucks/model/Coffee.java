@@ -29,6 +29,7 @@ public class Coffee implements Serializable {
     @JsonSerialize(using = MoneySerializer.class)
     @JsonDeserialize(using = MoneyDeserializer.class)
     private Money price;
+
     private Date createTime;
     private Date updateTime;
 }
