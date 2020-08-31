@@ -1,0 +1,18 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--开启AspectJAutoProxy支持，无需声明本级别aop即可获得父级别context的aop增强-->
+    <aop:aspectj-autoproxy/>
+
+    <bean id="testBeanX" class="com.example.context.TestBean">
+        <constructor-arg name="context" value="Bar" />
+    </bean>
+
+    <!--Aop切面声明,父级别context不会被aop增强-->
+    <!--<bean id="fooAspect" class="com.example.foo.FooAspect" />-->
+</beans>
