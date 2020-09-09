@@ -69,7 +69,7 @@ public class CoffeeController {
 
     /**
      * 文件上传演示
-     * consumes使用MULTIPART_FORM_DATA_VALUE
+     * consumes使用MULTIPART_FORM_DATA_VALUE，接收文件类型
      * @param file
      * @return
      */
@@ -107,8 +107,13 @@ public class CoffeeController {
         return coffeeService.getAllCoffee();
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    /**
+     * 通过produces  = MediaType.APPLICATION_JSON_UTF8_VALUE
+     * 返回json类型
+     * @param id
+     * @return
+     */
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public Coffee getById(@PathVariable Long id) {
         Coffee coffee = coffeeService.getCoffee(id);
