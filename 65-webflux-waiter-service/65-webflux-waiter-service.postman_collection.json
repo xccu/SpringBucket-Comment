@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "d41c56f5-fd6e-4b4a-b74b-bbb437c88464",
+		"name": "65-webflux-waiter-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "coffee",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/coffee/?name=latte",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coffee",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "latte"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer\":\"user\",\r\n    \"items\":[\r\n        \"mocha\"\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/order/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"order",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
